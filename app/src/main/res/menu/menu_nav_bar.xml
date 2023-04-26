@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home_selector"
+        android:iconTint="@color/red_app"
+        android:title="Home" />
+    <item
+        android:id="@+id/shop"
+        android:icon="@drawable/shop_selector"
+        android:iconTint="@color/red_app"
+        android:title="Shop" />
+    <item
+        android:id="@+id/bag"
+        android:icon="@drawable/bag_selector"
+        android:iconTint="@color/red_app"
+        android:title="Bag" />
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/favorite_selector"
+        android:iconTint="@color/red_app"
+        android:title="Favorite"
+        tools:targetApi="o" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/profile_selector"
+        android:iconTint="@color/red_app"
+        android:title="Profile"
+        tools:targetApi="o" />
+</menu>
