@@ -3,35 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/color_back_ground"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomBar"
+        android:layout_centerInParent="true">
+    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/rounded"
-        app:labelVisibilityMode="labeled"
         android:layout_centerHorizontal="true"
-        app:itemTextColor="@color/red_app"
+        android:background="@drawable/rounded"
         app:itemIconTint="@color/red_app"
+        app:itemTextColor="@color/red_app"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_nav_bar">
 
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
-
 
 </RelativeLayout>
