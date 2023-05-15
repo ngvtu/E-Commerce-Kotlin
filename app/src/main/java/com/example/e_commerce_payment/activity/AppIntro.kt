@@ -68,15 +68,15 @@ class AppIntro: AppIntro2() {
     //create onskippressed
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
-        setContentView(R.layout.activity_main)
-//        finish()
+        setContentView(R.layout.activity_login)
+        finish()
     }
 
     //create ondonepressed to main activity
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        setContentView(R.layout.activity_main)
-//        finish()
+        setContentView(R.layout.activity_login)
+        finish()
     }
 
 

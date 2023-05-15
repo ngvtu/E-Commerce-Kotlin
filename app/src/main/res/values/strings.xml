@@ -2,4 +2,11 @@
     <string name="app_name">E-Commerce-Payment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="forget_password">Please, enter your email address. You will receive a link to create a new password via email.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="text_intro">All your shopping in one App</string>
+    <string name="text_intro_2">Sell your devices the smarter, faster way for immediate cash and a cleaner conscience. Sell your devices the smarter, faster way for immediate cash and a cleaner conscience.</string>
+    <string name="text_welcome">Welcome back! Don\'t have an account?</string>
+
 </resources>
