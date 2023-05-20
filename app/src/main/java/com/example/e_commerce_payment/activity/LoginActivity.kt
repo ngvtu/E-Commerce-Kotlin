@@ -4,20 +4,31 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.e_commerce_payment.R
+import com.example.e_commerce_payment.Validator
+import com.example.e_commerce_payment.api.ApiConfig
+import com.example.e_commerce_payment.api.ApiService
+import com.example.e_commerce_payment.api.LoginResponse
 import com.example.e_commerce_payment.databinding.ActivityLoginBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class LoginActivity : AppCompatActivity(), View.OnClickListener {
+class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
     private lateinit var binding: ActivityLoginBinding
     private var doubleBackToExitPressedOnce = false
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
-    lateinit var mail: String
-    lateinit var password: String
+    private lateinit var loginPreferences: SharedPreferences
+    private lateinit var loginPrefsEditor: SharedPreferences.Editor
+    private lateinit var mail: String
+    private lateinit var pass: String
+
+
+    private var saveLogin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,15 +41,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun addEvents() {
         binding.btnBack.setOnClickListener(this)
         binding.btnLoginFb.setOnClickListener(this)
-        binding.btnGotoForgot.setOnClickListener(this)
         binding.btnLoginGg.setOnClickListener(this)
         binding.btnGotoSignUp.setOnClickListener(this)
         binding.btnLogin.setOnClickListener(this)
+        binding.btnGotoForgot.setOnClickListener(this)
 
-        var loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE)
-        var loginPrefsEditor = loginPreferences.edit()
-        var saveLogin = loginPreferences.getBoolean("saveLogin", false)
-        if (saveLogin == true) {
+        loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        loginPrefsEditor = loginPreferences.edit()
+        saveLogin = loginPreferences.getBoolean("saveLogin", false)
+
+        if (saveLogin) {
             binding.edtEmail.setText(loginPreferences.getString("username", ""))
             binding.edtPassword.setText(loginPreferences.getString("password", ""))
             binding.cbxRemember.isChecked = true
@@ -90,27 +102,49 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun gotoForgotPassword() {
         intent = intent.setClass(this, ForgotPasswordActivity::class.java)
         startActivity(intent)
-//        finish()
     }
 
     private fun login() {
 
-        val mail = binding.edtEmail.text.toString().trim()
-        val pass = binding.edtPassword.text.toString().trim()
+        mail = binding.edtEmail.text.toString().trim()
+        pass = binding.edtPassword.text.toString().trim()
 
-        if (validateEmail(mail) && validatePassword(pass)){
-            Toast.makeText(this, "Login success", Toast.LENGTH_SHORT).show()
+        if (validateEmail(mail) && validatePassword(pass)) {
+
+
+            val apiService: ApiService = ApiConfig.setUpRetrofit().create(ApiService::class.java)
+            val call = apiService.login(mail, pass)
+
+            call.enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val loginResponse: LoginResponse? = response.body()
+                        if (loginResponse != null){
+                            val token = loginResponse.accessToken
+                            Log.d("LoginActivity", "onResponse: $token")
+                        }
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("LoginActivity", "onFailure: $errorBody")
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Log.e("LoginActivity", "onFailure: ${t.message.toString()}")
+                }
+            })
+
         } else {
             Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun backToExit() {
-//        onBackPressed()
         intent = intent.setClass(this, AppIntro::class.java)
         startActivity(intent)
-//        finish()
     }
 
     @Deprecated("Deprecated in Java")
@@ -128,7 +162,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }, 2000)
     }
 
-    private fun validateEmail(email: String): Boolean {
+    override fun validateEmail(email: String): Boolean {
         return if (email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.layoutEmail.error = ""
             binding.layoutEmail.setEndIconDrawable(R.drawable.ic_tick)
@@ -148,10 +182,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun validatePassword(password: String): Boolean{
+    override fun validatePassword(password: String): Boolean {
         if (password.isNotEmpty() && password.length >= 6) {
             binding.layoutPassword.error = ""
-            binding.layoutPassword.setEndIconDrawable(R.drawable.ic_tick)
             return true
         } else if (password.isEmpty()) {
             binding.layoutPassword.error = "Password can't be empty"
@@ -167,6 +200,4 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             return false
         }
     }
-
-
 }
