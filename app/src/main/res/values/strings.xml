@@ -8,5 +8,19 @@
     <string name="text_intro">All your shopping in one App</string>
     <string name="text_intro_2">Sell your devices the smarter, faster way for immediate cash and a cleaner conscience. Sell your devices the smarter, faster way for immediate cash and a cleaner conscience.</string>
     <string name="text_welcome">Welcome back! Don\'t have an account?</string>
+    <string name="text_otp">OTP send your email. Check your mail!</string>
+    <string name="text_otp_resent">If you have not received the OTP.</string>
+    <string name="loading_text">Loading....</string>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="mukeshOtpStyle">@style/OtpWidget.OtpView</item>
+    </style>
+
+
+    <style name="OtpWidget.OtpView" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
 
 </resources>

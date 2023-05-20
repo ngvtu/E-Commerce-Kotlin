@@ -1,8 +1,10 @@
 package com.example.e_commerce_payment.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
@@ -13,6 +15,15 @@ import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
 import com.example.e_commerce_payment.api.SignUpResponse
 import com.example.e_commerce_payment.databinding.ActivitySignUpBinding
+import com.github.razir.progressbutton.attachTextChangeAnimator
+import com.github.razir.progressbutton.bindProgressButton
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
+import com.thecode.aestheticdialogs.AestheticDialog
+import com.thecode.aestheticdialogs.DialogAnimation
+import com.thecode.aestheticdialogs.DialogStyle
+import com.thecode.aestheticdialogs.DialogType
+import com.thecode.aestheticdialogs.OnDialogClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -88,6 +99,14 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
 
         if (validateEmail(mail) && validatePassword(pass)) {
 
+            bindProgressButton(binding.btnSignUp)
+            binding.btnSignUp.attachTextChangeAnimator()
+            binding.btnSignUp.showProgress {
+                buttonTextRes = R.string.loading_text
+                progressColor = R.color.white
+            }
+
+
             Log.d("SignUpActivity", "signUp: ")
 
             val retrofit: Retrofit = Retrofit.Builder()
@@ -113,27 +132,47 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
                                 "Sign up successfully" -> {
                                     Log.d("SignUpActivity", "onResponse: $message")
 
-                                    // tạo 1 dialog đăng ký thành công
-
-                                    intent = intent.setClass(this@SignUpActivity, LoginActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                    binding.btnSignUp.hideProgress("Sign up successfully")
+                                    AestheticDialog.Builder(this@SignUpActivity, DialogStyle.FLAT, DialogType.SUCCESS)
+                                        .setTitle("Sign Up Success!")
+                                        .setMessage("Check your email for account verification!")
+                                        .setAnimation(DialogAnimation.SHRINK)
+                                        .setGravity(Gravity.CENTER)
+                                        .setOnClickListener(object : OnDialogClickListener{
+                                            override fun onClick(dialog: AestheticDialog.Builder) {
+                                                dialog.dismiss()
+                                                intent = intent.setClass(this@SignUpActivity, OtpActivity::class.java)
+                                                startActivity(intent)
+                                                finish()
+                                            }
+                                        })
+                                        .show()
                                 }
                                 else -> {
                                     Log.d("SignUpActivity", "onResponse: Unknown message - $message")
+                                    binding.btnSignUp.hideProgress("Sign up failed")
                                 }
                             }
                         }
                     } else {
                         val errorBody = response.errorBody()?.string()
-
                         Log.e("SignUpActivity", "onResponse error: $errorBody")
-                        Toast.makeText(
-                            this@SignUpActivity,
-                            "Tài khoản đã tồn tại",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        // để dialog đã đăng ký tài khoản ởdđây
+                        binding.btnSignUp.hideProgress("SIGN UP")
+
+                        AestheticDialog.Builder(this@SignUpActivity, DialogStyle.FLAT, DialogType.ERROR)
+                            .setTitle("Oop! Error")
+                            .setMessage("Email is already exist")
+                            .setCancelable(false)
+                            .setDarkMode(false)
+                            .setGravity(Gravity.CENTER)
+                            .setAnimation(DialogAnimation.SHRINK)
+                            .setOnClickListener(object : OnDialogClickListener {
+                                override fun onClick(dialog: AestheticDialog.Builder) {
+                                    dialog.dismiss()
+                                    //actions...
+                                }
+                            })
+                            .show()
                     }
                 }
 

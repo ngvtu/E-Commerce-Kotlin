@@ -65,9 +65,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    // OTP view
+    implementation 'com.github.rajputmukesh748:MukeshOtpView:1.0.0'
+    implementation 'com.github.GoodieBag:Pinview:v1.5'
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
-// Retrofit with Scalar Converter
+    // Retrofit with Scalar Converter
     implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+
+    implementation 'com.github.gabriel-TheCode:AestheticDialogs:1.3.6'
 }
