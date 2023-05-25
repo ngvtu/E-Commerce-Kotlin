@@ -47,13 +47,12 @@ class OtpActivity : AppCompatActivity() {
                 Toast.makeText(this@OtpActivity, "Finish", Toast.LENGTH_SHORT).show()
             }
         }
-        countDownTimer?.start()
+        countDownTimer.start()
         isTimerRunning = true
 
     }
 
     private fun addEvents() {
-
         binding.btnBack.setOnClickListener {
             Toast.makeText(this@OtpActivity, "Backk", Toast.LENGTH_SHORT).show()
         }
@@ -62,13 +61,26 @@ class OtpActivity : AppCompatActivity() {
             val otpValue = binding.otpView.value
             if (otpValue == "aaaaaa"){
                 Toast.makeText(this@OtpActivity, "Success", Toast.LENGTH_SHORT).show()
+
                 intent = intent.setClass(this@OtpActivity, MainActivity::class.java)
                 startActivity(intent)
                 finish()
             } else{
-
+                AestheticDialog.Builder(this@OtpActivity, DialogStyle.FLAT, DialogType.ERROR)
+                    .setTitle("OTP incorrect!")
+                    .setMessage("Check your mail again to input success")
+                    .setDuration(Gravity.TOP)
+                    .setCancelable(false)
+                    .setDarkMode(false)
+                    .setAnimation(DialogAnimation.SLIDE_DOWN)
+                    .setOnClickListener(object : OnDialogClickListener{
+                        override fun onClick(dialog: AestheticDialog.Builder) {
+                            dialog.dismiss()
+                            binding.otpView.value = ""
+                        }
+                    })
+                    .show()
             }
-            Toast.makeText(this@OtpActivity, "Verification", Toast.LENGTH_SHORT).show()
         }
 
         binding.tvResendOtp.setOnClickListener {
@@ -80,7 +92,7 @@ class OtpActivity : AppCompatActivity() {
     }
 
     private fun resetTimer() {
-        countDownTimer?.cancel()
+        countDownTimer.cancel()
         isTimerRunning = false
     }
 
@@ -92,7 +104,6 @@ class OtpActivity : AppCompatActivity() {
         }
 
         this.doubleBackToExitPressedOnce = true
-
         AestheticDialog.Builder(this@OtpActivity, DialogStyle.TOASTER, DialogType.WARNING)
             .setTitle("Warning")
             .setMessage("If you EXIT this process you can't authenticate you account!")

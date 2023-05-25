@@ -11,6 +11,7 @@
     <string name="text_otp">OTP send your email. Check your mail!</string>
     <string name="text_otp_resent">If you have not received the OTP.</string>
     <string name="loading_text">Loading....</string>
+    <string name="adding">Adding... to cart</string>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="mukeshOtpStyle">@style/OtpWidget.OtpView</item>

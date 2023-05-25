@@ -3,10 +3,12 @@ package com.example.e_commerce_payment.activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.e_commerce_payment.R
+import com.example.e_commerce_payment.storage.MyPreferenceManager
 import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 
-class AppIntro: AppIntro2() {
+class AppIntro : AppIntro2() {
+    private lateinit var myPreferenceManager: MyPreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,16 +70,26 @@ class AppIntro: AppIntro2() {
     //create onskippressed
     override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
-        setContentView(R.layout.activity_login)
+        intent = intent.setClass(this@AppIntro, LoginActivity::class.java)
+        startActivity(intent)
         finish()
     }
 
     //create ondonepressed to main activity
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        setContentView(R.layout.activity_login)
-        finish()
-    }
 
+        myPreferenceManager = MyPreferenceManager(this@AppIntro)
+
+        if (myPreferenceManager.getToken() != null) {
+            intent = intent.setClass(this@AppIntro, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            intent = intent.setClass(this@AppIntro, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 
 }

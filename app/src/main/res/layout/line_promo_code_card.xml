@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp"
+    android:layout_height="80dp"
+    android:background="@drawable/border_item"
+    android:elevation="4dp">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/img_discount" />
+
+    <TextView
+        android:id="@+id/tvValuePromo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/metropolis_bold"
+        android:text="10"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tvValuePromo"
+        android:layout_marginTop="23dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="@color/white"
+            android:text="%" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:fontFamily="@font/metropolis_bold"
+            android:textColor="@color/white"
+            android:text="off" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvNameCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="93dp"
+        android:layout_marginTop="22dp"
+        android:fontFamily="@font/metropolis_medium"
+        android:text="Personal offer"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="93dp"
+        android:layout_marginTop="46dp"
+        android:fontFamily="@font/metropolis_regular"
+        android:text="mypromocode2022"
+        android:textColor="@color/black"
+        android:textSize="11sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDayRemain"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/metropolis_regular"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            android:layout_height="wrap_content"
+            android:text="6" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/metropolis_regular"
+            android:textColor="@color/gray"
+            android:textSize="11sp"
+            android:text=" days remaining" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnApply"
+        android:layout_width="93dp"
+        android:layout_height="33dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="33dp"
+        android:gravity="center"
+        android:elevation="15dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/metropolis_medium"
+        android:textSize="14sp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_border_red"
+        android:text="Apply" />
+
+
+</RelativeLayout>

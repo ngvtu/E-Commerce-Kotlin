@@ -1,4 +1,4 @@
-package com.example.e_commerce_payment
+package com.example.e_commerce_payment.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

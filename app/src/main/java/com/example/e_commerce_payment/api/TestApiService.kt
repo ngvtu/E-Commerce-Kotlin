@@ -6,6 +6,4 @@ interface TestApiService {
     @GET("user")
     fun getInforUser(): String
 
-
-
 }

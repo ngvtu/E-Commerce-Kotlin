@@ -1,6 +1,5 @@
 package com.example.e_commerce_payment.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -103,7 +102,7 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
             binding.btnSignUp.attachTextChangeAnimator()
             binding.btnSignUp.showProgress {
                 buttonTextRes = R.string.loading_text
-                progressColor = R.color.white
+                progressColor = getColor(R.color.WHITE)
             }
 
 
@@ -135,7 +134,7 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
                                     binding.btnSignUp.hideProgress("Sign up successfully")
                                     AestheticDialog.Builder(this@SignUpActivity, DialogStyle.FLAT, DialogType.SUCCESS)
                                         .setTitle("Sign Up Success!")
-                                        .setMessage("Check your email for account verification!")
+                                        .setMessage("Check your email for account verification! ")
                                         .setAnimation(DialogAnimation.SHRINK)
                                         .setGravity(Gravity.CENTER)
                                         .setOnClickListener(object : OnDialogClickListener{
@@ -169,7 +168,7 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
                             .setOnClickListener(object : OnDialogClickListener {
                                 override fun onClick(dialog: AestheticDialog.Builder) {
                                     dialog.dismiss()
-                                    //actions...
+                                    binding.edtEmail.requestFocus()
                                 }
                             })
                             .show()
@@ -204,7 +203,7 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
             binding.edtEmail.requestFocus()
             false
         } else {
-            binding.layoutEmail.error = "Something went wrong"
+            binding.layoutEmail.error = "Password not match"
             binding.edtEmail.requestFocus()
             false
         }

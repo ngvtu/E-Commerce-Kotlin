@@ -28,6 +28,10 @@ class MyPreferenceManager(context: Context) {
         editor!!.apply()
     }
 
+    fun getToken(): String? {
+        return sharedPreferences!!.getString(KEY_ACCESS_TOKEN, null)
+    }
+
     fun putString(key: String?, value: String?) {
         editor!!.putString(key, value)
         editor!!.apply()
@@ -39,11 +43,10 @@ class MyPreferenceManager(context: Context) {
 
     //Method to clear the login data of the application.
     fun clearLoginData() {
-        editor!!.remove(KEY_EMAIL)
-        editor!!.remove(KEY_PASSWORD)
-        editor!!.remove(IS_LOGIN)
-        editor!!.remove(KEY_ID)
-        editor!!.remove(KEY_ACCESS_TOKEN)
+        editor!!.putString(KEY_EMAIL, "")
+        editor!!.putString(KEY_PASSWORD, "")
+        editor!!.putString(KEY_ID, "")
+        editor!!.putString(KEY_ACCESS_TOKEN, "")
         editor!!.apply()
     }
 
@@ -54,6 +57,10 @@ class MyPreferenceManager(context: Context) {
 
     fun getPassword(): String? {
         return sharedPreferences!!.getString(KEY_PASSWORD, null)
+    }
+
+    fun getIdUser(): String? {
+        return sharedPreferences!!.getString(KEY_ID, null)
     }
 
     fun saveLogin(context: Context, email: String, password: String, isLogin: Boolean) {

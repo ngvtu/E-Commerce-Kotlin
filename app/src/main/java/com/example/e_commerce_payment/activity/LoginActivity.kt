@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.Patterns
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,11 @@ import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.thecode.aestheticdialogs.AestheticDialog
+import com.thecode.aestheticdialogs.DialogAnimation
+import com.thecode.aestheticdialogs.DialogStyle
+import com.thecode.aestheticdialogs.DialogType
+import com.thecode.aestheticdialogs.OnDialogClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +49,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
     }
 
     private fun addEvents() {
-
         binding.btnBack.setOnClickListener(this)
         binding.btnLoginFb.setOnClickListener(this)
         binding.btnLoginGg.setOnClickListener(this)
@@ -73,8 +78,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
     }
 
     private fun login() {
-
-
         mail = binding.edtEmail.text.toString().trim()
         pass = binding.edtPassword.text.toString().trim()
 
@@ -84,7 +87,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
             binding.btnLogin.attachTextChangeAnimator()
             binding.btnLogin.showProgress {
                 buttonTextRes = R.string.loading_text
-                progressColor = R.color.white
+                progressColor = getColor(R.color.WHITE)
             }
 
             if (binding.cbxRemember.isChecked) {
@@ -119,18 +122,29 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
                             finish()
                         }
                     } else {
-
-                        // đaăng nhập sai mật khẩu hoặc password
-
                         val errorBody = response.errorBody()?.string()
-                        Log.e("LoginActivity", "onFailure: $errorBody")
+                        Log.e("LoginActivity", "sai mạt khẩu $errorBody")
                         binding.btnLogin.hideProgress("LOGIN AGAIN!")
 
+                        AestheticDialog.Builder(this@LoginActivity, DialogStyle.TOASTER, DialogType.ERROR)
+                            .setTitle("Error")
+                            .setMessage("Email or password is incorrect! Check it again")
+                            .setCancelable(false)
+                            .setDarkMode(false)
+                            .setGravity(Gravity.TOP)
+                            .setAnimation(DialogAnimation.SLIDE_DOWN)
+                            .setOnClickListener(object : OnDialogClickListener {
+                                override fun onClick(dialog: AestheticDialog.Builder) {
+                                    dialog.dismiss()
+                                    binding.edtEmail.requestFocus()
+                                }
+                            })
+                            .show()
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.e("LoginActivity", "onFailure: ${t.message.toString()}")
+                    Log.e("LoginActivity", "call api fail ${t.message.toString()}")
                     binding.btnLogin.hideProgress("LOGIN AGAIN!")
 
                 }
@@ -215,14 +229,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
+           onBackPressed()
             return
         }
 
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
 
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+        Handler(Looper.getMainLooper()).postDelayed( {
             doubleBackToExitPressedOnce = false
         }, 2000)
     }
