@@ -37,8 +37,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgUser"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:scaleType="centerCrop"
             android:src="@drawable/img" />
 
@@ -55,11 +55,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="@font/metropolis_semi_bold"
-                android:gravity="start"
+                android:gravity="center_vertical"
                 android:padding="3dp"
+
                 android:text="Name user"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tvEmailUser"
@@ -68,9 +69,10 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/metropolis_medium"
                 android:padding="3dp"
+                android:gravity="center_vertical"
                 android:text="username@email.com"
                 android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -95,6 +97,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToMyOder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -170,6 +173,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToAddresses"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -234,6 +238,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToPaymentMethods"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -298,6 +303,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToPromoCodes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -350,6 +356,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToMyReviews"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -426,6 +433,7 @@
                 android:backgroundTint="@color/color_back_ground">
 
                 <RelativeLayout
+                    android:id="@+id/goToSettings"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 

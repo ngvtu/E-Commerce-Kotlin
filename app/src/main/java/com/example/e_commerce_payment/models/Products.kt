@@ -14,6 +14,6 @@ data class Products(
     val productSize: String,
     val productSlug: String,
     val productThumbnail: String,
-    val sellingPrice: Int,
+    var sellingPrice: Int,
     val updatedAt: String
 )

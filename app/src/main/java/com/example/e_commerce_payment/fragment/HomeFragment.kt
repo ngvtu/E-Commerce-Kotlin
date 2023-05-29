@@ -63,7 +63,7 @@ class HomeFragment : Fragment() {
 
 
         val retrofit: Retrofit = ApiConfig.setUpRetrofit()
-        var apiService: ApiService = retrofit.create(ApiService::class.java)
+        val apiService: ApiService = retrofit.create(ApiService::class.java)
 
         val call = apiService.getProducts()
         call.enqueue(object : Callback<ProductResponse> {
@@ -111,7 +111,7 @@ class HomeFragment : Fragment() {
                     val productResponse = response.body()
                     productResponse?.let {
                         val productList = it.products
-                        productsAdapter = ProductsAdapter(productList, fragmentContext)
+                        productsAdapter = ProductsAdapter(productList, fragmentContext  )
 
                         // Set the adapter to the RecyclerView
                         rcvListItemSale.adapter = productsAdapter

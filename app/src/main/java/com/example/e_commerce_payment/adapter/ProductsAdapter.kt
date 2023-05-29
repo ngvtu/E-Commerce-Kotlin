@@ -97,7 +97,5 @@ class ProductsAdapter(private val mList: List<ProductItems>, private var context
         val textView2: TextView = itemView.findViewById(R.id.textView2)
         val imageView8: ImageView = itemView.findViewById(R.id.imageView8)
 
-
-        // Add other views from the layout file as needed
     }
 }

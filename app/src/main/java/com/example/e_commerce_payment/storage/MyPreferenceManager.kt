@@ -15,12 +15,22 @@ class MyPreferenceManager(context: Context) {
     val IS_LOGIN = "is_login"
     val KEY_EMAIL = "email"
     val KEY_PASSWORD = "password"
+    val KEY_FULLNAME = "fullName"
+    val KEY_GENDER = "gender"
+    val KEY_DATE_OF_BIRTH = "dateOfBirth"
+    val KEY_ADDRESS = "address"
+    val KEY_PHONE = "phone"
 
 
     init {
         this.context = context
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         editor = sharedPreferences?.edit()
+    }
+
+    fun saveIdUser(id: String?) {
+        editor!!.putString(KEY_ID, id)
+        editor!!.apply()
     }
 
     fun saveToken(token: String?) {
@@ -47,12 +57,23 @@ class MyPreferenceManager(context: Context) {
         editor!!.putString(KEY_PASSWORD, "")
         editor!!.putString(KEY_ID, "")
         editor!!.putString(KEY_ACCESS_TOKEN, "")
+        editor!!.putBoolean(IS_LOGIN, false)
+        editor!!.putString(KEY_FULLNAME, "")
+        editor!!.putString(KEY_DATE_OF_BIRTH, "")
+        editor!!.putString(KEY_GENDER, "")
+        editor!!.putString(KEY_ADDRESS, "")
+        editor!!.putString(KEY_PHONE, "")
+
         editor!!.apply()
     }
 
     // create fun to get email, get password
     fun getEmail(): String? {
         return sharedPreferences!!.getString(KEY_EMAIL, null)
+    }
+
+    fun getFullName(): String? {
+        return sharedPreferences!!.getString(KEY_FULLNAME, null)
     }
 
     fun getPassword(): String? {
@@ -77,4 +98,17 @@ class MyPreferenceManager(context: Context) {
         return sharedPreferences!!.getBoolean(IS_LOGIN, false)
     }
 
+    fun saveProfile(context: Context, id: String, email: String, fullName: String, phone : String, address: String, dateOfBirth: String, gender: String ) {
+        sharedPreferences =
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        editor = sharedPreferences?.edit()
+        editor?.putString(KEY_ID, id)
+        editor?.putString(KEY_EMAIL, email)
+        editor?.putString(KEY_FULLNAME, fullName)
+        editor?.putString(KEY_PHONE, phone)
+        editor?.putString(KEY_ADDRESS, address)
+        editor?.putString(KEY_DATE_OF_BIRTH, dateOfBirth)
+        editor?.putString(KEY_GENDER, gender)
+        editor?.apply()
+    }
 }

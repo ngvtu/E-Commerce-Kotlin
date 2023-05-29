@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@drawable/bg_dialog_select_size"
+    tools:ignore="MissingDefaultResource">
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        app:srcCompat="@drawable/ic_line" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/metropolis_semi_bold"
+        android:gravity="center"
+        android:text="Sort by"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvSortLowToHigh"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/textView"
+        android:background="@color/white"
+        android:layout_centerHorizontal="true"
+        android:elevation="4dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/metropolis_medium"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:text="Price: lowest to high"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvSortHighToLow"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/tvSortLowToHigh"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/metropolis_medium"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:paddingStart="14dp"
+        android:text="Price: high to low"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvSortNewest"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:layout_below="@id/tvSortHighToLow"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/metropolis_medium"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:text="Newest"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>

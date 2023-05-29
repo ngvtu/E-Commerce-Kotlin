@@ -12,6 +12,5 @@ object ApiConfig {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-
     }
 }

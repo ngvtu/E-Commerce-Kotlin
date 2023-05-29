@@ -39,7 +39,7 @@
         android:fontFamily="@font/metropolis_semi_bold"
         android:text="Personal Information"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView23"
@@ -101,26 +101,26 @@
         android:id="@+id/btnChangeInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/textView35"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="120dp"
         android:fontFamily="@font/metropolis_semi_bold"
         android:text="Change"
-        android:textColor="@color/gray"
-        android:textSize="16sp" />
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/red_app"
+        android:textSize="20sp" />
+
 
     <TextView
         android:id="@+id/btnChangePass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/textView"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="370dp"
         android:fontFamily="@font/metropolis_semi_bold"
         android:text="Change"
-        android:textColor="@color/gray"
-        android:textSize="16sp" />
-
+        android:textColor="@color/red_app"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView"
@@ -132,7 +132,7 @@
         android:fontFamily="@font/metropolis_semi_bold"
         android:text="Password"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView1"
@@ -144,7 +144,7 @@
         android:fontFamily="@font/metropolis_semi_bold"
         android:text="Notifications"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -223,15 +223,14 @@
 
     <TextView
         android:id="@+id/btnSignOut"
-        android:background="@drawable/bg_border_red"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="650dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_border_red"
         android:fontFamily="@font/metropolis_semi_bold"
+        android:gravity="center"
         android:text="SIGN OUT"
         android:textColor="@color/white"
         android:textSize="16sp" />

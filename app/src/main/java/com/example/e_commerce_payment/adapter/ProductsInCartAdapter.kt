@@ -13,12 +13,11 @@ import com.bumptech.glide.Glide
 import com.example.e_commerce_payment.R
 import com.example.e_commerce_payment.models.ProductsInCartItems
 
-class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, private var context: Context?)
-    :RecyclerView.Adapter<ProductsInCartAdapter.ViewHolder>(){
-    constructor() : this(
-        emptyList(),
-        null
-    )
+class ProductsInCartAdapter(
+    private val mList: List<ProductsInCartItems>, private var context: Context?,
+    private val deleteListener: OnProductDeleteListener
+) : RecyclerView.Adapter<ProductsInCartAdapter.ViewHolder>() {
+
     private var listItems: List<ProductsInCartItems>? = null
 
     fun setData(newList: List<ProductsInCartItems>) {
@@ -27,7 +26,7 @@ class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, privat
     }
 
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imgItem)
         val tvNameItem: TextView = itemView.findViewById(R.id.tvNameItem)
         val tvPriceItem: TextView = itemView.findViewById(R.id.tvPrice)
@@ -41,7 +40,7 @@ class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, privat
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.line_item_list_in_cart, parent , false)
+            .inflate(R.layout.line_item_list_in_cart, parent, false)
         return ViewHolder(view)
     }
 
@@ -52,20 +51,31 @@ class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, privat
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val productsInCartItems: ProductsInCartItems = mList[position]
 
-        context?.let { Glide.with(it).load(productsInCartItems.products.productImg).into(holder.image) }
+        context?.let {
+            Glide.with(it).load(productsInCartItems.products.productImg).into(holder.image)
+        }
         holder.tvNameItem.text = productsInCartItems.products.productName
         holder.tvPriceItem.text = productsInCartItems.products.sellingPrice.toString()
         holder.tvSize.text = productsInCartItems.productSize
         holder.tvColor.text = productsInCartItems.productColor
         holder.tvQuantity.text = productsInCartItems.quantity.toString()
         holder.btnSub.setOnClickListener {
-            if (productsInCartItems.quantity > 1){
+            if (productsInCartItems.quantity > 1) {
                 productsInCartItems.quantity -= 1
+                var priceTotalItems =
+                    (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice) * productsInCartItems.quantity
+
+//                priceTotalItems = priceTotalItems - productsInCartItems.products.sellingPrice
+
+                holder.tvPriceItem.text = priceTotalItems.toString()
                 holder.tvQuantity.text = productsInCartItems.quantity.toString()
             }
         }
         holder.btnPlus.setOnClickListener {
             productsInCartItems.quantity += 1
+            var priceTotalItems =
+                (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice)* productsInCartItems.quantity
+            holder.tvPriceItem.text = priceTotalItems.toString()
             holder.tvQuantity.text = productsInCartItems.quantity.toString()
         }
         holder.btnMenu.setOnClickListener { v ->
@@ -74,8 +84,14 @@ class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, privat
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_delete -> {
+                        val deletedProductId = mList[position].id
+                        mList.toMutableList().removeAt(position)
 
-                        Toast.makeText(context, "Delete items", Toast.LENGTH_SHORT).show()
+                        notifyItemRemoved(position)
+                        notifyItemRangeChanged(position, mList.size)
+
+                        Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show()
+                        deleteListener.onProductDelete(deletedProductId)
                         true
                     }
 
@@ -94,6 +110,10 @@ class ProductsInCartAdapter(private val mList: List<ProductsInCartItems>, privat
         holder.itemView.setOnClickListener {
             Toast.makeText(context, "Item will cumback", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    interface OnProductDeleteListener {
+        fun onProductDelete(productId: Int)
     }
 
 }
