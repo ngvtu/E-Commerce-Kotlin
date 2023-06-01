@@ -1,5 +1,6 @@
 package com.example.e_commerce_payment.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,8 +14,8 @@ import com.example.e_commerce_payment.R
 import com.example.e_commerce_payment.Validator
 import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
-import com.example.e_commerce_payment.api.LoginResponse
 import com.example.e_commerce_payment.databinding.ActivityLoginBinding
+import com.example.e_commerce_payment.models.MessageLoginResponse
 import com.example.e_commerce_payment.storage.MyPreferenceManager
 import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
@@ -102,31 +103,39 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
 
             val apiService: ApiService = ApiConfig.setUpRetrofit().create(ApiService::class.java)
             val call = apiService.login(mail, pass)
+            Log.d("LoginActivity", "call api login: $mail, $pass")
 
-            call.enqueue(object : Callback<LoginResponse> {
+            call.enqueue(object : Callback<MessageLoginResponse> {
                 override fun onResponse(
-                    call: Call<LoginResponse>,
-                    response: Response<LoginResponse>
+                    call: Call<MessageLoginResponse>,
+                    response: Response<MessageLoginResponse>
                 ) {
-                    if (response.isSuccessful) {
-                        val loginResponse: LoginResponse? = response.body()
-                        if (loginResponse != null) {
-                            val token = loginResponse.accessToken
-                            Log.d("LoginActivity", "Login done! token is: $token")
-                            Toast.makeText(this@LoginActivity, "Login Done!", Toast.LENGTH_SHORT).show()
-                            binding.btnLogin.hideProgress("LOGIN DONE!")
-                            preferenceManager?.saveToken(token)
 
-                            intent = intent.setClass(this@LoginActivity, MainActivity::class.java)
+                    if (response.isSuccessful) {
+                        val msg: String = response.body()?.msg.toString()
+                        if (msg == "Please check email to enter code") {
+                            Log.d("LoginActivity", "Login done! goto OTP")
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Check your mail to get OTP",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.btnLogin.hideProgress("Goto OTP")
+
+                            intent = Intent(this@LoginActivity, OtpActivity::class.java)
+                            intent.putExtra("email", mail)
                             startActivity(intent)
                             finish()
                         }
                     } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("LoginActivity", "sai mạt khẩu $errorBody")
+                        Log.e("LoginActivity", "sai mật khẩu hoặc email")
                         binding.btnLogin.hideProgress("LOGIN AGAIN!")
 
-                        AestheticDialog.Builder(this@LoginActivity, DialogStyle.TOASTER, DialogType.ERROR)
+                        AestheticDialog.Builder(
+                            this@LoginActivity,
+                            DialogStyle.TOASTER,
+                            DialogType.ERROR
+                        )
                             .setTitle("Error")
                             .setMessage("Email or password is incorrect! Check it again")
                             .setCancelable(false)
@@ -143,16 +152,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
                     }
                 }
 
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.e("LoginActivity", "call api fail ${t.message.toString()}")
+                override fun onFailure(call: Call<MessageLoginResponse>, t: Throwable) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Login fail, check your network",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.d("LoginActivity", "Login fail, check your network")
                     binding.btnLogin.hideProgress("LOGIN AGAIN!")
-
                 }
             })
-
-        } else {
-            Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
-            binding.btnLogin.hideProgress("LOGIN AGAIN!")
 
         }
     }
@@ -229,14 +238,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-           onBackPressed()
+            onBackPressed()
             return
         }
 
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
 
-        Handler(Looper.getMainLooper()).postDelayed( {
+        Handler(Looper.getMainLooper()).postDelayed({
             doubleBackToExitPressedOnce = false
         }, 2000)
     }

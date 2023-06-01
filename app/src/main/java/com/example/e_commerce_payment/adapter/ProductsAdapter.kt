@@ -4,17 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.e_commerce_payment.R
 import com.example.e_commerce_payment.activity.DetailActivity
+import com.example.e_commerce_payment.api.ApiConfig
+import com.example.e_commerce_payment.api.ApiService
+import com.example.e_commerce_payment.models.FavoriteResponse
 import com.example.e_commerce_payment.models.ProductItems
+import com.example.e_commerce_payment.storage.MyPreferenceManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProductsAdapter(private val mList: List<ProductItems>, private var context: Context?) :
     RecyclerView.Adapter<ProductsAdapter.ViewHolder>() {
@@ -22,7 +32,11 @@ class ProductsAdapter(private val mList: List<ProductItems>, private var context
         emptyList(),
         null
     )
+
     private var listItems: List<ProductItems>? = null
+    private val myPreferenceManager: MyPreferenceManager by lazy {
+        MyPreferenceManager(context!!)
+    }
 
 
     fun setData(newList: List<ProductItems>) {
@@ -56,9 +70,10 @@ class ProductsAdapter(private val mList: List<ProductItems>, private var context
         holder.tvNameItem.text = product.productName
         holder.tvPrice.text = product.sellingPrice.toString()
 
-        if (product.discountPrice > 0){
-            val newPrice: Float = (product.sellingPrice - product.discountPrice ).toFloat()
-            val discountValue: Float = ((product.sellingPrice - newPrice)/product.sellingPrice)*100.toFloat()
+        if (product.discountPrice > 0) {
+            val newPrice: Float = (product.sellingPrice - product.discountPrice).toFloat()
+            val discountValue: Float =
+                ((product.sellingPrice - newPrice) / product.sellingPrice) * 100.toFloat()
 
             val solution = Math.round(discountValue * 10.0) / 10.0
 
@@ -84,6 +99,41 @@ class ProductsAdapter(private val mList: List<ProductItems>, private var context
             intent.putExtras(bundle)
             context!!.startActivity(intent)
         }
+
+        holder.btnAddFavorite.setOnClickListener {
+            val token = "Bearer " + myPreferenceManager.getToken()
+            Log.d("ProductAdapter", "onBindViewHolder: $token")
+            val apiService: ApiService = ApiConfig.setUpRetrofit().create(ApiService::class.java)
+            Log.d("ProductAdapter", "onBindViewHolder: ${product.id}")
+            val call = apiService.addToFavoriteItem(token, product.id)
+            call.enqueue(object : Callback<FavoriteResponse> {
+                override fun onResponse(
+                    call: Call<FavoriteResponse>,
+                    response: Response<FavoriteResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(
+                            "ProductAdapter",
+                            "onResponse: ${response.body()?.data?.id.toString()}"
+                        )
+                        Toast.makeText(context, "Add to favorite success", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(context, "Add to favorite failed", Toast.LENGTH_SHORT).show()
+                        Log.d(
+                            "ProductAdapter",
+                            "onResponse: ${response.body()}"
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<FavoriteResponse>, t: Throwable) {
+                    Log.e("ProductAdapter", "onFailure: ${t.message}")
+                }
+
+            })
+
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -96,6 +146,7 @@ class ProductsAdapter(private val mList: List<ProductItems>, private var context
         val tvNewPrice: TextView = itemView.findViewById(R.id.tvNewPrice)
         val textView2: TextView = itemView.findViewById(R.id.textView2)
         val imageView8: ImageView = itemView.findViewById(R.id.imageView8)
+        val btnAddFavorite: ImageButton = itemView.findViewById(R.id.btnAddFavorite)
 
     }
 }

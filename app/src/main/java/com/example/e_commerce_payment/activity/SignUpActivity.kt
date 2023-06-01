@@ -140,7 +140,7 @@ class SignUpActivity : AppCompatActivity(), OnClickListener, Validator {
                                         .setOnClickListener(object : OnDialogClickListener{
                                             override fun onClick(dialog: AestheticDialog.Builder) {
                                                 dialog.dismiss()
-                                                intent = intent.setClass(this@SignUpActivity, OtpActivity::class.java)
+                                                intent = intent.setClass(this@SignUpActivity, LoginActivity::class.java)
                                                 startActivity(intent)
                                                 finish()
                                             }

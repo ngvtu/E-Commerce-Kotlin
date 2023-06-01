@@ -108,7 +108,6 @@ class MainActivity : AppCompatActivity() {
                 Log.e("ProfileFragment", "get profile failed!@ ${t.message}")
 
             }
-
         })
     }
 

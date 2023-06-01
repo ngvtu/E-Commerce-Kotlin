@@ -1,5 +1,6 @@
 package com.example.e_commerce_payment.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.e_commerce_payment.activity.PaymentActivity
 import com.example.e_commerce_payment.adapter.ProductsInCartAdapter
 import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
@@ -22,6 +24,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
+
     private lateinit var binding: FragmentBagBinding
     private lateinit var listProductsInCartItems: ArrayList<ProductsInCartItems>
     private lateinit var productsInCartAdapter: ProductsInCartAdapter
@@ -43,8 +46,19 @@ class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
         token = "Bearer " + myPreferenceManager.getToken()
 
         fetchProductsInCart()
-
+        addEvents()
         return binding.root
+    }
+
+    private fun addEvents() {
+        binding.btnCheckOut.setOnClickListener {
+           val intent = Intent(activity, PaymentActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("totalAmount", binding.tvTotalAmount.text.toString())
+
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
 
@@ -59,18 +73,37 @@ class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
                 call: Call<ProductsInCartResponse>,
                 response: Response<ProductsInCartResponse>
             ) {
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     val productsInCartResponse: ProductsInCartResponse? = response.body()
                     val productsInCart = productsInCartResponse?.data
                     if (productsInCart != null) {
-                        Log.d("BagFragment", "Success to get products in cart!  ${productsInCart.size}")
+                        Log.d(
+                            "BagFragment",
+                            "Success to get products in cart!  ${productsInCart.size}"
+                        )
                         for (productInCart in productsInCart) {
                             listProductsInCartItems.add(productInCart)
-                            productsInCartAdapter = ProductsInCartAdapter(listProductsInCartItems, context, this@BagFragment)
+                            productsInCartAdapter = ProductsInCartAdapter(
+                                listProductsInCartItems,
+                                context,
+                                this@BagFragment
+                            )
+                            binding.tvTotalAmount.text = calculateTotalAmount().toString()
+
+                            productsInCartAdapter.setOnQuantityChangeListener(object : ProductsInCartAdapter.OnQuantityChangeListener {
+                                override fun onQuantityChanged() {
+                                    // Tính toán lại tổng số tiền
+                                    val totalAmount = calculateTotalAmount()
+
+                                    // Cập nhật lại giá trị của tvTotalAmount
+                                    binding.tvTotalAmount.text = totalAmount.toString()
+                                }
+                            })
+
                             rcvListProductsItemInCart.adapter = productsInCartAdapter
                         }
                     }
-                } else{
+                } else {
                     Log.e("BagFragment", "Failed to get products in cart")
                 }
             }
@@ -91,16 +124,19 @@ class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
 
         val token: String = "Bearer " + myPreferenceManager.getToken()
         val call = retrofit.deleteProductInCart(token, deleteProductInCart)
-        call.enqueue(object : Callback<MessagesResponse>{
+        call.enqueue(object : Callback<MessagesResponse> {
             override fun onResponse(
                 call: Call<MessagesResponse>,
                 response: Response<MessagesResponse>
             ) {
-                if(response.isSuccessful){
-                    Log.d("BagFragment", "Success to delete product in cart ${response.body()?.message}")
+                if (response.isSuccessful) {
+                    Log.d(
+                        "BagFragment",
+                        "Success to delete product in cart ${response.body()?.message}"
+                    )
                     fetchProductsInCart()
 
-                } else{
+                } else {
                     Log.e("BagFragment", "Failed to delete product in cart")
                 }
             }
@@ -125,6 +161,19 @@ class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
 
         // Cập nhật lại danh sách
         updateListAfterProductDelete(productId)
+
+        calculateTotalAmount()
     }
+
+    private fun calculateTotalAmount(): Double {
+        var totalAmount = 0.0
+        for (productInCart in listProductsInCartItems) {
+            val priceTotalItems =
+                (productInCart.products.sellingPrice - productInCart.products.discountPrice) * productInCart.quantity
+            totalAmount += priceTotalItems
+        }
+        return totalAmount
+    }
+
 
 }

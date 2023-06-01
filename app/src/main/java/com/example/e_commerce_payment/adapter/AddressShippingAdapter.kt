@@ -11,17 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.e_commerce_payment.R
 import com.example.e_commerce_payment.models.AddressItems
 
-class AddressShippingAdapter (private val mList: List<AddressItems>, private var context: Context?):
+class AddressShippingAdapter(
+    private val mList: List<AddressItems>, private var context: Context?,
+    private val addressEditListener: AddressEditListener
+) :
     RecyclerView.Adapter<AddressShippingAdapter.ViewHolder>() {
     private var listAddressShipping: List<AddressItems>? = null
+
+
     fun setData(newList: List<AddressItems>) {
         listAddressShipping = newList
         notifyDataSetChanged()
     }
-    constructor() : this(
-        emptyList(),
-        null
-    )
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(com.example.e_commerce_payment.R.layout.line_shipping_address, parent, false)
@@ -34,7 +36,7 @@ class AddressShippingAdapter (private val mList: List<AddressItems>, private var
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val address = mList[position]
-        
+
         holder.tvNameUser.text = address.fullName
         holder.tvPhoneUser.text = address.phone
         holder.tvAddress.text = address.address
@@ -42,13 +44,20 @@ class AddressShippingAdapter (private val mList: List<AddressItems>, private var
         holder.tvDistrict.text = address.district
         holder.tvProvince.text = address.province
         holder.btnDelete.setOnClickListener {
-            mList.drop(position)
-            notifyDataSetChanged()
+            val deleteAddressShipping = mList[position].id
+            mList.toMutableList().removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, mList.size)
+
+            Toast.makeText(context, "Address Shipping delete!", Toast.LENGTH_SHORT).show()
+            addressEditListener.onAddressDelete(deleteAddressShipping)
         }
+
         holder.btnEdit.setOnClickListener {
-            Toast.makeText(context, "Edit address", Toast.LENGTH_SHORT).show()
+
+//            addressEditListener?.onAddressEdit(deleteAddressShipping)
         }
-        
+
         holder.cbxUse.setOnClickListener {
             if (holder.cbxUse.isChecked) {
                 Toast.makeText(context, "Use address", Toast.LENGTH_SHORT).show()
@@ -67,6 +76,16 @@ class AddressShippingAdapter (private val mList: List<AddressItems>, private var
         val btnDelete: TextView = itemView.findViewById(R.id.btnDelete)
         val btnEdit: TextView = itemView.findViewById(R.id.btnEdit)
         val cbxUse: CheckBox = itemView.findViewById(R.id.cbxUse)
-        
+
     }
+
+//    fun setAddressEditListener(listener: AddressEditListener) {
+//        addressEditListener = listener
+//    }
+
+    interface AddressEditListener {
+        fun onAddressDelete(addressShippingId: Int)
+        fun onAddressEdit(addressShippingId: Int)
+    }
+
 }

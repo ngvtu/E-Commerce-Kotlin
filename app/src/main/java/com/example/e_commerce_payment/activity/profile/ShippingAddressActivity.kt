@@ -21,6 +21,7 @@ import com.example.e_commerce_payment.databinding.ActivityShippingAddressBinding
 import com.example.e_commerce_payment.models.AddressGetResponse
 import com.example.e_commerce_payment.models.AddressItems
 import com.example.e_commerce_payment.models.AddressResponse
+import com.example.e_commerce_payment.models.MessagesResponse
 import com.example.e_commerce_payment.storage.MyPreferenceManager
 import com.github.razir.progressbutton.attachTextChangeAnimator
 import com.github.razir.progressbutton.bindProgressButton
@@ -32,13 +33,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ShippingAddressActivity : AppCompatActivity() {
+class ShippingAddressActivity : AppCompatActivity(), AddressShippingAdapter.AddressEditListener {
     private lateinit var binding: ActivityShippingAddressBinding
     private val myPreferenceManager: MyPreferenceManager by lazy {
         MyPreferenceManager(this@ShippingAddressActivity)
     }
-    private lateinit var addressShippingAdapter: AddressShippingAdapter
-    private lateinit var listAddress: List<AddressItems>
+    private var addressShippingAdapter: AddressShippingAdapter? = null
+    private lateinit var listAddress: ArrayList<AddressItems>
     private lateinit var rcvListAddress: RecyclerView
 
 
@@ -69,11 +70,12 @@ class ShippingAddressActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val addressResponse: AddressGetResponse? = response.body()
                     if (addressResponse != null) {
-                        listAddress = addressResponse.data
-                        addressShippingAdapter = AddressShippingAdapter(listAddress, this@ShippingAddressActivity)
-                        rcvListAddress.adapter = addressShippingAdapter
 
-                        Log.d("ShippingAddressActivity", "get data done!: " + addressResponse.data)
+                        for (addressShipping in addressResponse.data) {
+                            listAddress.add(addressShipping)
+                        }
+                        addressShippingAdapter = AddressShippingAdapter(listAddress, this@ShippingAddressActivity, this@ShippingAddressActivity)
+                        rcvListAddress.adapter = addressShippingAdapter
                     }
                 } else {
                     Log.d("ShippingAddressActivity", "onResponse: " + response.message())
@@ -176,7 +178,9 @@ class ShippingAddressActivity : AppCompatActivity() {
                             )
                                 .show()
                             btnSaveAddress.hideProgress("Add Shipping Address done!")
+                            getListAddress()
                             dialog.dismiss()
+
                             Log.d("ShippingAddressActivity", "onResponse: ${response.body()}")
                         } else{
                             Toast.makeText(
@@ -208,5 +212,47 @@ class ShippingAddressActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onAddressDelete(addressShippingId: Int) {
+        deleteAddressShipping(addressShippingId)
+
+        updateListAddressShipping(addressShippingId)
+    }
+
+    private fun updateListAddressShipping(addressShippingId: Int) {
+        val updateList = listAddress.filter { it.id != addressShippingId}
+        addressShippingAdapter?.setData(updateList)
+    }
+
+    override fun onAddressEdit(addressShippingId: Int) {
+        TODO("Not yet implemented")
+    }
+
+    private fun deleteAddressShipping(addressShippingId: Int){
+        val retrofit: ApiService = ApiConfig.setUpRetrofit().create(ApiService::class.java)
+        val call = retrofit.deleteShippingAddress("Bearer " + myPreferenceManager.getToken(),addressShippingId )
+
+        call.enqueue(object : Callback<MessagesResponse>{
+            override fun onResponse(
+                call: Call<MessagesResponse>,
+                response: Response<MessagesResponse>
+            ) {
+                if (response.isSuccessful){
+                    Toast.makeText(this@ShippingAddressActivity, "Delete Address Done!", Toast.LENGTH_SHORT).show()
+                    Log.d("ShippingAddressActivity", "onResponse: ${response.body()}")
+                    getListAddress()
+
+                } else{
+                    Toast.makeText(this@ShippingAddressActivity, "Delete Address Failed!", Toast.LENGTH_SHORT).show()
+                    Log.d("ShippingAddressActivity", "onResponse: ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MessagesResponse>, t: Throwable) {
+                Log.d("ShippingAddressActivity", "onFailure: ${t.message}")
+            }
+
+        })
     }
 }

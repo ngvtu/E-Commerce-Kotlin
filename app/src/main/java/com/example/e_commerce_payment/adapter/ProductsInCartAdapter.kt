@@ -14,14 +14,23 @@ import com.example.e_commerce_payment.R
 import com.example.e_commerce_payment.models.ProductsInCartItems
 
 class ProductsInCartAdapter(
-    private val mList: List<ProductsInCartItems>, private var context: Context?,
+    private val mList: List<ProductsInCartItems>,
+    private var context: Context?,
     private val deleteListener: OnProductDeleteListener
 ) : RecyclerView.Adapter<ProductsInCartAdapter.ViewHolder>() {
 
     private var listItems: List<ProductsInCartItems>? = null
+    private var totalAmount: Int = 0  // Biến tổng số tiền
+    private var onQuantityChangeListener: OnQuantityChangeListener? = null
+
 
     fun setData(newList: List<ProductsInCartItems>) {
         listItems = newList
+
+        totalAmount = 0  // Đặt giá trị ban đầu của totalAmount
+        for (item in newList) {
+            totalAmount += (item.products.sellingPrice - item.products.discountPrice) * item.quantity
+        }
         notifyDataSetChanged()
     }
 
@@ -54,30 +63,38 @@ class ProductsInCartAdapter(
         context?.let {
             Glide.with(it).load(productsInCartItems.products.productImg).into(holder.image)
         }
+
         holder.tvNameItem.text = productsInCartItems.products.productName
-        holder.tvPriceItem.text = productsInCartItems.products.sellingPrice.toString()
+        holder.tvPriceItem.text = (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice).toString()
         holder.tvSize.text = productsInCartItems.productSize
         holder.tvColor.text = productsInCartItems.productColor
         holder.tvQuantity.text = productsInCartItems.quantity.toString()
+
         holder.btnSub.setOnClickListener {
             if (productsInCartItems.quantity > 1) {
                 productsInCartItems.quantity -= 1
-                var priceTotalItems =
+                val priceTotalItems =
                     (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice) * productsInCartItems.quantity
 
 //                priceTotalItems = priceTotalItems - productsInCartItems.products.sellingPrice
-
+                totalAmount -= (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice)
+                onQuantityChangeListener?.onQuantityChanged()
                 holder.tvPriceItem.text = priceTotalItems.toString()
                 holder.tvQuantity.text = productsInCartItems.quantity.toString()
             }
         }
+
         holder.btnPlus.setOnClickListener {
             productsInCartItems.quantity += 1
-            var priceTotalItems =
+            val priceTotalItems =
                 (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice)* productsInCartItems.quantity
+
+            totalAmount -= (productsInCartItems.products.sellingPrice - productsInCartItems.products.discountPrice)
+            onQuantityChangeListener?.onQuantityChanged()
             holder.tvPriceItem.text = priceTotalItems.toString()
             holder.tvQuantity.text = productsInCartItems.quantity.toString()
         }
+
         holder.btnMenu.setOnClickListener { v ->
             val popupMenu = PopupMenu(v.context, v)
             popupMenu.inflate(R.menu.menu_items_in_cart)
@@ -114,6 +131,14 @@ class ProductsInCartAdapter(
 
     interface OnProductDeleteListener {
         fun onProductDelete(productId: Int)
+    }
+
+
+    fun setOnQuantityChangeListener(listener: OnQuantityChangeListener) {
+        onQuantityChangeListener = listener
+    }
+    interface OnQuantityChangeListener {
+        fun onQuantityChanged()
     }
 
 }

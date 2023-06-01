@@ -3,7 +3,11 @@ package com.example.e_commerce_payment.api
 import com.example.e_commerce_payment.models.AddressGetResponse
 import com.example.e_commerce_payment.models.AddressResponse
 import com.example.e_commerce_payment.models.CategoriesResponse
+import com.example.e_commerce_payment.models.FavoriteResponse
+import com.example.e_commerce_payment.models.GetAllFavoriteResponse
+import com.example.e_commerce_payment.models.MessageLoginResponse
 import com.example.e_commerce_payment.models.MessagesResponse
+import com.example.e_commerce_payment.models.OtpResponse
 import com.example.e_commerce_payment.models.ProductResponse
 import com.example.e_commerce_payment.models.ProductsInCartItems
 import com.example.e_commerce_payment.models.ProductsInCartResponse
@@ -33,7 +37,7 @@ interface ApiService {
     fun login(
         @Field("email") email: String,
         @Field("password") password: String
-    ): Call<LoginResponse>
+    ): Call<MessageLoginResponse>
 
 
     @GET("products?limit=30&page=1&sortBy=createdAt=asc")
@@ -60,7 +64,8 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("cart")
-    fun addProductToCart( @Header("Authorization") token: String?,
+    fun addProductToCart(
+        @Header("Authorization") token: String?,
         @Field("productId") productId: Int?,
         @Field("quantity") quantity: Int?,
         @Field("productSize") productSize: String = "Size 1",
@@ -82,7 +87,7 @@ interface ApiService {
         @Field("province") province: String?,
         @Field("phone") phone: String?,
         @Field("ward") ward: String?,
-        @Field("district") district : String?,
+        @Field("district") district: String?,
         @Field("address") address: String?,
         @Field("postcode") postcode: String = "10000",
     ): Call<AddressResponse>
@@ -92,4 +97,35 @@ interface ApiService {
         @Header("Authorization") token: String?,
         @Path("idUser") idUser: String?,
     ): Call<AddressGetResponse>
+
+    @DELETE("shipping/{idShipping}")
+    fun deleteShippingAddress(
+        @Header("Authorization") token: String?,
+        @Path("idShipping") idShipping: Int?
+    ): Call<MessagesResponse>
+
+    @FormUrlEncoded
+    @POST("favorite")
+    fun addToFavoriteItem(
+        @Header("Authorization") token: String?,
+        @Field("productId") productId: Int?,
+    ): Call<FavoriteResponse>
+
+    @GET("favorite")
+    fun getAllFavoriteItems(
+        @Header("Authorization") token: String?,
+    ): Call<GetAllFavoriteResponse>
+
+    @FormUrlEncoded
+    @POST("verify-code")
+    fun verifyCodeOtp(
+        @Field("email") email: String?,
+        @Field("code") code: String?
+    ): Call<OtpResponse>
+
+    @DELETE("favorite/{productId}")
+    fun deleteItemFavorite(
+        @Header("Authorization") token: String?,
+        @Path("productId") productId: Int?,
+    ) : Call<MessagesResponse>
 }
