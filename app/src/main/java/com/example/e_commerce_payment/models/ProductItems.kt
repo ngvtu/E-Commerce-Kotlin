@@ -15,7 +15,8 @@ data class ProductItems(
     val productName: String,
     val productSize: String,
     val productSlug: String,
-    val productThumbnail: List<String>,
+    val productThumbnail: String,
     val sellingPrice: Int,
+    val quantity: Int,
     val updatedAt: String
 ) : Serializable

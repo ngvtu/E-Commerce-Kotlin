@@ -1,6 +1,6 @@
 package com.example.e_commerce_payment.models
 
-data class MessageLoginResponse(
-    val msg: String,
+data class CreateProductResponse(
+    val `data`: ProductItems,
     val message: String
 )

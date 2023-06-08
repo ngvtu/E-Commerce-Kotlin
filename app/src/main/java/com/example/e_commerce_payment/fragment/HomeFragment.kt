@@ -21,7 +21,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ProductsAdapter.OnProductDeleteListener {
 
     private lateinit var listItemsSale: List<ProductItems>
     private lateinit var listItemsNew: List<ProductItems>
@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
                     val productResponse = response.body()
                     productResponse?.let {
                         val productList = it.products
-                        productsAdapter = ProductsAdapter(productList, fragmentContext)
+                        productsAdapter = ProductsAdapter(productList, fragmentContext, this@HomeFragment )
 
                         // Set the adapter to the RecyclerView
                         rcvListItemNew.adapter = productsAdapter
@@ -111,7 +111,7 @@ class HomeFragment : Fragment() {
                     val productResponse = response.body()
                     productResponse?.let {
                         val productList = it.products
-                        productsAdapter = ProductsAdapter(productList, fragmentContext  )
+                        productsAdapter = ProductsAdapter(productList, fragmentContext, this@HomeFragment  )
 
                         // Set the adapter to the RecyclerView
                         rcvListItemSale.adapter = productsAdapter
@@ -129,5 +129,9 @@ class HomeFragment : Fragment() {
                 Log.e("HomeFragment", "Call Api fail is: ${t.message}")
             }
         })
+    }
+
+    override fun onProductDelete(productId: Int) {
+
     }
 }

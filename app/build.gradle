@@ -88,4 +88,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
 
     androidTestImplementation 'com.tompee:funtablayout:1.1.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+
+    def ev_version = "1.0.4"
+    implementation "com.wajahatkarim:easyvalidation-core:$ev_version"
+
+    // Shows Toasts by default for every validation error
+    implementation "com.wajahatkarim:easyvalidation-toast:$ev_version"
+
+
+    implementation 'com.stripe:stripe-android:20.25.5'
 }

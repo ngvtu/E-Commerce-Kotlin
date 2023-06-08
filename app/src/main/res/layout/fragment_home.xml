@@ -23,12 +23,12 @@
 
                 <ImageView
                     android:id="@+id/imvBgHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="196dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="170dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_2" />
+                    android:scaleType="centerInside"
+                    android:src="@drawable/banner" />
 
                 <TextView
                     android:id="@+id/textView16"
@@ -39,7 +39,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="136dp"
                     android:fontFamily="@font/metropolis_extra_bold"
-                    android:text="Street clothes"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="34sp" />
             </RelativeLayout>
@@ -83,7 +83,7 @@
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="5dp"
                     android:fontFamily="@font/metropolis_medium"
-                    android:text="View all"
+                    android:text=""
                     android:textColor="@color/red_app"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -134,7 +134,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="18dp"
                     android:fontFamily="@font/metropolis_medium"
-                    android:text="View all"
+                    android:text=""
                     android:textColor="@color/red_app"
                     android:textSize="14sp" />
             </RelativeLayout>

@@ -8,7 +8,7 @@ data class User(
     val fullName: String?,
     val gender: String,
     val id: Int,
-    val image: Any,
+    val image: String,
     val phone: Any,
     val refreshToken: String,
     val role: Int,

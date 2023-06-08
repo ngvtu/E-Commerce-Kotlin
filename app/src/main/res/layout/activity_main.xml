@@ -22,8 +22,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/rounded"
-        app:itemIconTint="@color/red_app"
-        app:itemTextColor="@color/red_app"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_nav_bar">
 

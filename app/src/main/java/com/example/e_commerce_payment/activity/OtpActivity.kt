@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.e_commerce_payment.activity.admin.MainAdminActivity
 import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
 import com.example.e_commerce_payment.databinding.ActivityOtpBinding
@@ -73,10 +74,18 @@ class OtpActivity : AppCompatActivity() {
 
                         Log.i("OtpActivity", "This is token $token")
                         getProfile(token)
+                        if(myPreferenceManager.getRole() == 2){
+                            intent = intent.setClass(this@OtpActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        if (myPreferenceManager.getRole() == 1){
+                            intent = intent.setClass(this@OtpActivity, MainAdminActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
 
-                        intent = intent.setClass(this@OtpActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+
                     } else {
                         AestheticDialog.Builder(
                             this@OtpActivity,
@@ -124,7 +133,9 @@ class OtpActivity : AppCompatActivity() {
                         user?.phone.toString(),
                         user?.address.toString(),
                         user?.dateOfBirth.toString(),
-                        user?.gender.toString()
+                        user?.gender.toString(),
+                        user?.image.toString(),
+                        user?.role!!.toInt()
                     )
                 }
             }

@@ -26,6 +26,8 @@ import com.thecode.aestheticdialogs.DialogAnimation
 import com.thecode.aestheticdialogs.DialogStyle
 import com.thecode.aestheticdialogs.DialogType
 import com.thecode.aestheticdialogs.OnDialogClickListener
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -128,27 +130,46 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, Validator {
                             finish()
                         }
                     } else {
-                        Log.e("LoginActivity", "sai mật khẩu hoặc email")
-                        binding.btnLogin.hideProgress("LOGIN AGAIN!")
+                        try {
+                            val errorBody = response.errorBody()?.string()
+                            val jsonObject = errorBody?.let { JSONObject(it) }
+                            val errorMessage = jsonObject?.getString("message")
 
-                        AestheticDialog.Builder(
-                            this@LoginActivity,
-                            DialogStyle.TOASTER,
-                            DialogType.ERROR
-                        )
-                            .setTitle("Error")
-                            .setMessage("Email or password is incorrect! Check it again")
-                            .setCancelable(false)
-                            .setDarkMode(false)
-                            .setGravity(Gravity.TOP)
-                            .setAnimation(DialogAnimation.SLIDE_DOWN)
-                            .setOnClickListener(object : OnDialogClickListener {
-                                override fun onClick(dialog: AestheticDialog.Builder) {
-                                    dialog.dismiss()
-                                    binding.edtEmail.requestFocus()
-                                }
-                            })
-                            .show()
+                            Log.e("LoginActivity", "Login fail: $errorMessage")
+
+                            // Xử lý lỗi dựa trên thông báo lỗi nhận được
+                            // ...
+                            Log.e("LoginActivity", "login sai: " +errorMessage)
+                            binding.btnLogin.hideProgress("LOGIN AGAIN!")
+
+                            AestheticDialog.Builder(
+                                this@LoginActivity,
+                                DialogStyle.TOASTER,
+                                DialogType.ERROR
+                            )
+                                .setTitle("Error")
+                                .setMessage("Email or password is incorrect! Check it again")
+                                .setCancelable(false)
+                                .setDarkMode(false)
+                                .setGravity(Gravity.TOP)
+                                .setAnimation(DialogAnimation.SLIDE_DOWN)
+                                .setOnClickListener(object : OnDialogClickListener {
+                                    override fun onClick(dialog: AestheticDialog.Builder) {
+                                        dialog.dismiss()
+                                        binding.edtEmail.requestFocus()
+                                    }
+                                })
+                                .show()
+
+                        } catch (e: JSONException) {
+                            Log.e("LoginActivity", "Error parsing error response: ${e.message}")
+
+                            // Xử lý lỗi khi không thể phân tích thông báo lỗi
+                            // ...
+                        }
+
+
+
                     }
                 }
 

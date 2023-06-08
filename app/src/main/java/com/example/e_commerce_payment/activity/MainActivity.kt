@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Log.d("ProfileFragment", "get profile done!@ ${response.body()}")
                     val user = response.body()
+                    myPreferenceManager.getImage()
                     myPreferenceManager.saveProfile(
                         this@MainActivity,
                         user?.id.toString(),
@@ -100,8 +101,12 @@ class MainActivity : AppCompatActivity() {
                         user?.phone.toString(),
                         user?.address.toString(),
                         user?.dateOfBirth.toString(),
-                        user?.gender.toString())
+                        user?.gender.toString(),
+                        user?.image.toString(),
+                        user?.role!!.toInt()
+                    )
                 }
+
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {

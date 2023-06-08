@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_dialog_select_size"
-    android:layout_height="470dp"
+    android:layout_height="match_parent"
     android:backgroundTint="@color/color_back_ground"
     android:padding="14dp"
     tools:ignore="MissingDefaultResource">
@@ -51,7 +51,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="200dp"
-        android:hint="Change or Set your name"
+        android:hint="Full Name"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
@@ -63,7 +63,7 @@
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtNewName"
+            android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:fontFamily="@font/metropolis_medium"
@@ -72,14 +72,14 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_change_email"
+        android:id="@+id/layout_change_phone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="280dp"
-        android:hint="New email"
+        android:hint="Number Phone"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
@@ -88,32 +88,114 @@
         app:helperTextTextColor="@android:color/holo_red_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:startIconDrawable="@drawable/ic_email">
+        app:startIconDrawable="@drawable/ic_phone">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtNewEmail"
+            android:id="@+id/edtPhone"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:fontFamily="@font/metropolis_medium"
-            android:inputType="textEmailAddress" />
+            android:inputType="number|phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_change_address"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="360dp"
+        android:hint="Address"
+        app:boxBackgroundColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:helperTextTextColor="@android:color/holo_red_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:startIconDrawable="@drawable/ic_place">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:fontFamily="@font/metropolis_medium"
+            android:inputType="textPostalAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_date_of_birth"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="490dp"
+        android:hint="Date of birth"
+        app:boxBackgroundColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:helperTextTextColor="@android:color/holo_red_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:startIconDrawable="@drawable/ic_date_range">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtDateOfBirth"
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+            android:fontFamily="@font/metropolis_medium"
+            android:inputType="date|datetime" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/btnUpdate"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:fontFamily="@font/metropolis_medium"
+        android:layout_below="@+id/layout_date_of_birth"
         android:layout_alignParentStart="true"
-        android:elevation="4dp"
-        android:textSize="16sp"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/bg_border_red"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="370dp"
-        android:text="UPDATE INFORMATION" />
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_border_red"
+        android:elevation="4dp"
+        android:fontFamily="@font/metropolis_medium"
+        android:gravity="center"
+        android:text="UPDATE INFORMATION"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/layout_change_address"
+        android:layout_marginEnd="14dp"
+        android:weightSum="2"
+        android:layout_marginTop="@dimen/padd_10"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+
+        <RadioButton
+            android:id="@+id/radioFeMale"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+    </RadioGroup>
 
 </RelativeLayout>

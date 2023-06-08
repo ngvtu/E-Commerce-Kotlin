@@ -34,7 +34,6 @@ class ProductsInCartAdapter(
         notifyDataSetChanged()
     }
 
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imgItem)
         val tvNameItem: TextView = itemView.findViewById(R.id.tvNameItem)
@@ -106,7 +105,6 @@ class ProductsInCartAdapter(
 
                         notifyItemRemoved(position)
                         notifyItemRangeChanged(position, mList.size)
-
                         Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show()
                         deleteListener.onProductDelete(deletedProductId)
                         true

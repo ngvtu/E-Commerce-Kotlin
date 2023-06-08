@@ -3,14 +3,17 @@ package com.example.e_commerce_payment.api
 import com.example.e_commerce_payment.models.AddressGetResponse
 import com.example.e_commerce_payment.models.AddressResponse
 import com.example.e_commerce_payment.models.CategoriesResponse
+import com.example.e_commerce_payment.models.CreateProductResponse
 import com.example.e_commerce_payment.models.FavoriteResponse
 import com.example.e_commerce_payment.models.GetAllFavoriteResponse
 import com.example.e_commerce_payment.models.MessageLoginResponse
 import com.example.e_commerce_payment.models.MessagesResponse
 import com.example.e_commerce_payment.models.OtpResponse
+import com.example.e_commerce_payment.models.PaymentReponse
 import com.example.e_commerce_payment.models.ProductResponse
 import com.example.e_commerce_payment.models.ProductsInCartItems
 import com.example.e_commerce_payment.models.ProductsInCartResponse
+import com.example.e_commerce_payment.models.UpdateInFoResponse
 import com.example.e_commerce_payment.models.User
 import retrofit2.Call
 import retrofit2.http.DELETE
@@ -19,6 +22,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -127,5 +131,63 @@ interface ApiService {
     fun deleteItemFavorite(
         @Header("Authorization") token: String?,
         @Path("productId") productId: Int?,
-    ) : Call<MessagesResponse>
+    ): Call<MessagesResponse>
+
+    @FormUrlEncoded
+    @PUT("users/{idUser}")
+    fun updateInfoUser(
+        @Header("Authorization") token: String?,
+        @Path("idUser") idUser: String?,
+        @Field("fullName") fullName: String?,
+        @Field("address") address: String?,
+        @Field("gender") gender: String?,
+        @Field("dateOfBirth") dateOfBirth: String?,
+    ): Call<UpdateInFoResponse>
+
+
+    @FormUrlEncoded
+    @POST("products")
+    fun createProduct(
+        @Header("Authorization") token: String?,
+        @Field("productName") productName: String?,
+        @Field("productSize") productSize: String?,
+        @Field("productColor") productColor: String?,
+        @Field("discountPrice") discountPrice: Int?,
+        @Field("sellingPrice") sellingPrice: Int?,
+        @Field("productDescription") productDescription: String?,
+        @Field("categoryId") categoryId: Int?,
+        @Field("productImg") productImg: String?,
+        @Field("quantity") quantity: Int?,
+    ): Call<CreateProductResponse>
+
+    @FormUrlEncoded
+    @POST("payment-sheet")
+    fun payment(
+        @Header("Authorization") token: String?,
+        @Field("amount") amount: Int?
+    ): Call<PaymentReponse>
+
+
+    @DELETE("products/{productId}")
+    fun deleteProduct(
+        @Header("Authorization") token: String?,
+        @Path("productId") productId: Int?
+    ): Call<MessagesResponse>
+
+    @FormUrlEncoded
+    @PUT("products/{productId}")
+    fun updateProduct(
+        @Header("Authorization") token: String?,
+        @Path("productId") productId: Int?,
+        @Field("productName") productName: String?,
+        @Field("productSize") productSize: String?,
+        @Field("productColor") productColor: String?,
+        @Field("discountPrice") discountPrice: Int?,
+        @Field("sellingPrice") sellingPrice: Int?,
+        @Field("productDescription") productDescription: String?,
+        @Field("categoryId") categoryId: Int?,
+        @Field("productImg") productImg: String?,
+        @Field("quantity") quantity: Int?,
+    ): Call<MessagesResponse>
+
 }

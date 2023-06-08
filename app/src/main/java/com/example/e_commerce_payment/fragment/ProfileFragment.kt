@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.e_commerce_payment.activity.profile.SettingsActivity
 import com.example.e_commerce_payment.activity.profile.ShippingAddressActivity
 import com.example.e_commerce_payment.databinding.FragmentProfileBinding
@@ -57,6 +58,8 @@ class ProfileFragment : Fragment() {
             val intentGotoMyWishlist = Intent(context, ShippingAddressActivity::class.java)
             startActivity(intentGotoMyWishlist)
         }
+
+
     }
     private fun getProfile() {
 //        val token: String = "Bearer " +myPreferenceManager.getToken()
@@ -77,10 +80,11 @@ class ProfileFragment : Fragment() {
 //            override fun onFailure(call: Call<User>, t: Throwable) {
 //                Log.e("ProfileFragment", "get profile failed!@ ${t.message}")
 //            }
-//
 //        })
 //
         binding.tvNameUser.text = myPreferenceManager.getFullName()
         binding.tvEmailUser.text = myPreferenceManager.getEmail()
+//        Glide.with(this@ProfileFragment).load(productsInFavoriteItems.productImg).into(holder.imageItem)
+        context?.let { Glide.with(it).load(myPreferenceManager.getImage()).into(binding.imgUser) };
     }
 }

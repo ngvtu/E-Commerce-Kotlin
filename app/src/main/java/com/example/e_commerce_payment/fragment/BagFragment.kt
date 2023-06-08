@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.e_commerce_payment.activity.PaymentActivity
+import com.example.e_commerce_payment.activity.CheckoutActivity
 import com.example.e_commerce_payment.adapter.ProductsInCartAdapter
 import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
@@ -52,9 +52,9 @@ class BagFragment : Fragment(), ProductsInCartAdapter.OnProductDeleteListener {
 
     private fun addEvents() {
         binding.btnCheckOut.setOnClickListener {
-           val intent = Intent(activity, PaymentActivity::class.java)
+           val intent = Intent(activity, CheckoutActivity::class.java)
             val bundle = Bundle()
-            bundle.putString("totalAmount", binding.tvTotalAmount.text.toString())
+            bundle.putFloat("totalAmount", binding.tvTotalAmount.text.toString().toFloat())
 
             intent.putExtras(bundle)
             startActivity(intent)

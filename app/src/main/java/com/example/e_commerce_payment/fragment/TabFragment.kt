@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,19 +15,27 @@ import com.example.e_commerce_payment.api.ApiConfig
 import com.example.e_commerce_payment.api.ApiService
 import com.example.e_commerce_payment.databinding.FragmentTabBinding
 import com.example.e_commerce_payment.models.CategoriesItems
+import com.example.e_commerce_payment.models.MessagesResponse
 import com.example.e_commerce_payment.models.ProductItems
 import com.example.e_commerce_payment.models.ProductResponse
+import com.example.e_commerce_payment.storage.MyPreferenceManager
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class TabFragment : Fragment() {
+class TabFragment : Fragment(), ProductsAdapter.OnProductDeleteListener {
     private lateinit var binding: FragmentTabBinding
     private lateinit var productsAdapter: ProductsAdapter
     private lateinit var listProductItems: ArrayList<ProductItems>
     private lateinit var rvProducts: RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private val myPreferenceManager: MyPreferenceManager by lazy {
+        MyPreferenceManager(requireContext())
+    }
+
 
     private val idCategoryArr = arrayOf(
         "smartphones",
@@ -54,16 +63,10 @@ class TabFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val category = arguments?.getString("arg_title")
-
-        Log.d("TabFragment", "Success to get category is: ${category}")
-        val index: Int = idCategoryArr.indexOf(category)
-        if (index >= 0) {
-            fetchProductsByCategoryId(index + 1)
-        }
+        fetchProducts()
 
         // Set the title
-        binding.tvTitle.text = category
+
     }
 
 
@@ -73,7 +76,7 @@ class TabFragment : Fragment() {
 
         val retrofit = ApiConfig.setUpRetrofit().create(ApiService::class.java)
         val call = retrofit.getProductsByCategoryId(30, 1, categoryId)
-        Log.d("TabFragment", "Success to get products by category id: $categoryId")
+//        Log.d("TabFragment", "Success to get products by category id: $categoryId")
         call.enqueue(object : Callback<ProductResponse> {
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
@@ -88,7 +91,7 @@ class TabFragment : Fragment() {
                             )
 
                             listProductItems.add(productItems)
-                            productsAdapter = ProductsAdapter(listProductItems, requireContext())
+                            productsAdapter = ProductsAdapter(listProductItems, requireContext(), this@TabFragment )
                             binding.rvProducts.adapter = productsAdapter
                         }
                     }
@@ -103,6 +106,14 @@ class TabFragment : Fragment() {
         })
     }
 
+    fun fetchProducts(){
+        val category = arguments?.getString("arg_title")
+        val index: Int = idCategoryArr.indexOf(category)
+        if (index >= 0) {
+            fetchProductsByCategoryId(index + 1)
+        }
+        binding.tvTitle.text = category
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,7 +124,6 @@ class TabFragment : Fragment() {
         rvProducts.setHasFixedSize(true)
         rvProducts.layoutManager = GridLayoutManager(activity, 2)
 
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -135,6 +145,59 @@ class TabFragment : Fragment() {
         }
     }
 
+    override fun onProductDelete(productId: Int) {
+        deleteProduct(productId)
+        updateListAfterProductDelete(productId)
+    }
 
+    private fun updateListAfterProductDelete(productId: Int) {
+        val index = listProductItems.indexOfFirst { it.id == productId }
+        if (index >= 0) {
+            listProductItems.removeAt(index)
+            productsAdapter.notifyItemRemoved(index)
+        }
+    }
 
+    private fun deleteProduct(productId: Int) {
+        val token = "Bearer " +myPreferenceManager.getToken()
+        val retrofit = ApiConfig.setUpRetrofit().create(ApiService::class.java)
+        val call = retrofit.deleteProduct(token, productId)
+        call.enqueue(object : Callback<MessagesResponse> {
+            override fun onResponse(
+                call: Call<MessagesResponse>,
+                response: Response<MessagesResponse>
+            ) {
+                if (response.isSuccessful){
+                    val data = response.body()
+                    data?.let {
+                        Log.d("TabFragment", "Success to delete product: " + it.message)
+                        Toast.makeText(context, "Delete Success", Toast.LENGTH_SHORT).show()
+                        fetchProducts()
+                    }
+                } else {
+                    try {
+                        val errorBody = response.errorBody()?.string()
+                        val jsonObject = errorBody?.let { JSONObject(it) }
+                        val errorMessage = jsonObject?.getString("message")
+
+                        Log.e("TabFragment", "response fail: $errorMessage")
+
+                        // Xử lý lỗi dựa trên thông báo lỗi nhận được
+                        // ...
+
+                    } catch (e: JSONException) {
+                        Log.e("TabFragment", "Error parsing error response: ${e.message}")
+
+                        // Xử lý lỗi khi không thể phân tích thông báo lỗi
+                        // ...
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MessagesResponse>, t: Throwable) {
+                Log.d("TabFragment", "Failed to connect: " + t.message)
+            }
+
+        })
+    }
 }

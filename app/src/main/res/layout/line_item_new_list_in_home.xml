@@ -28,6 +28,8 @@
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
 
+
+
     <ImageButton
         android:id="@+id/btnAddFavorite"
         android:layout_width="wrap_content"
@@ -171,5 +173,16 @@
         android:textColor="@color/white"
         android:textSize="11sp"
         android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_shadow"
+        android:padding="13dp"
+        android:src="@drawable/ic_x"
+        app:tint="@color/gray" />
 
 </RelativeLayout>

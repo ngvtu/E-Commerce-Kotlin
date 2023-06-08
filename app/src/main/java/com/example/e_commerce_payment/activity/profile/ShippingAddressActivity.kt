@@ -231,7 +231,7 @@ class ShippingAddressActivity : AppCompatActivity(), AddressShippingAdapter.Addr
 
     private fun deleteAddressShipping(addressShippingId: Int){
         val retrofit: ApiService = ApiConfig.setUpRetrofit().create(ApiService::class.java)
-        val call = retrofit.deleteShippingAddress("Bearer " + myPreferenceManager.getToken(),addressShippingId )
+        val call = retrofit.deleteShippingAddress("Bearer " + myPreferenceManager.getToken(), addressShippingId )
 
         call.enqueue(object : Callback<MessagesResponse>{
             override fun onResponse(
@@ -245,7 +245,7 @@ class ShippingAddressActivity : AppCompatActivity(), AddressShippingAdapter.Addr
 
                 } else{
                     Toast.makeText(this@ShippingAddressActivity, "Delete Address Failed!", Toast.LENGTH_SHORT).show()
-                    Log.d("ShippingAddressActivity", "onResponse: ${response.body()}")
+                    Log.d("ShippingAddressActivity", "onResponse: ${response.errorBody().toString()}")
                 }
             }
 
